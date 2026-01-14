@@ -1,17 +1,11 @@
-function App() {
+import Main from './components/Main';
+import Sidebar from './components/Sidebar';
+
+export default function App() {
   return (
-    <div className="flex h-screen ">
-      {/* left column */}
-      <div className="grow">
-        <div className="p-9"></div>
-      </div>
-
-      {/* right column */}
-      <div className="w-96 shrink-0 border-l border-gray-400">
-        <div className="p-6"></div>
-      </div>
+    <div className="flex flex-col lg:flex-row h-screen ">
+      <Main />
+      <Sidebar />
     </div>
-  )
+  );
 }
-
-export default App
