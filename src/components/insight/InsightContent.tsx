@@ -1,4 +1,4 @@
-const MainContent = () => {
+const InsightContent = () => {
   return (
     <div className="flex-1 p-4 sm:px-6 lg:px-12 w-full lg:overflow-y-auto">
       <div className="flex h-full justify-center items-center">
@@ -10,4 +10,4 @@ const MainContent = () => {
     </div>
   );
 };
-export default MainContent;
+export default InsightContent;
