@@ -1,4 +1,9 @@
-const InsightHeader = () => {
+type Props = {
+  onGenerateInsight: () => void;
+  isLoading: boolean;
+};
+
+const InsightHeader = ({ onGenerateInsight, isLoading }: Props) => {
   return (
     <div className="border-b border-gray-800">
       <div className="w-full px-4 py-4 sm:px-6 sm:py-6 lg:px-12 lg:py-8 ">
@@ -12,6 +17,8 @@ const InsightHeader = () => {
           className="w-full sm:w-auto
          text-gray-900 px-6 py-3 rounded-lg
          transition-colors bg-gray-100 hover:bg-white"
+          onClick={onGenerateInsight}
+          disabled={isLoading}
         >
           Generate Insight
         </button>

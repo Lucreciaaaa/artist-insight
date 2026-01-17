@@ -1,1 +1,1 @@
-export type InsightStatus = 'empty' | 'loading' | 'success';
+export type InsightStatus = 'empty' | 'loading' | 'success' | 'error';
