@@ -1,21 +1,32 @@
 import { useState } from 'react';
-
 import type { InsightStatus } from '../../types/ui/insight/status';
-
 import InsightHeader from './InsightHeader';
 import InsightContent from './InsightContent';
+import type { ArtistIdentity } from '../../types/domain/artist';
+import {
+  mapArtistInfo,
+  type ArtistInfoResponse,
+} from '../../services/lastfm/mapper';
 
 const InsightManager = () => {
-  // const API_KEY = import.meta.env.LASTFM_API_KEY;
-
   const [status, setStatus] = useState<InsightStatus>('empty');
-  const [data, setData] = useState<string | null>(null);
+  const [artist, setArtist] = useState<ArtistIdentity | null>(null);
 
   const generateInsight = async () => {
     setStatus('loading');
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setData('Performance analysis generated !! ');
+      // local backend to load data
+      const response = await fetch(
+        'http://localhost:4000/api/lastfm/artist/Cher'
+      );
+      if (!response.ok) throw new Error('Failed to fetch artist');
+
+      const data: ArtistInfoResponse = await response.json();
+
+      const { identity } = mapArtistInfo(data);
+
+      setArtist(identity);
       setStatus('success');
     } catch (error) {
       console.error('Insight generation failed:', error);
@@ -38,7 +49,9 @@ const InsightManager = () => {
         <InsightContent content="Generating insight ..." />
       )}
 
-      {status === 'success' && <InsightContent content={data} />}
+      {status === 'success' && artist && (
+        <InsightContent content={`Artist name: ${artist.name}`} />
+      )}
 
       {status === 'error' && (
         <InsightContent content="Failed generating analysis" />

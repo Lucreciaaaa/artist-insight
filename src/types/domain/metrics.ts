@@ -1,6 +1,8 @@
 export type TrackMetric = {
   id: string;
+  artistName: string;
   title: string; // song title
+  trackRank: number;
   playCount: number; // total streams recorded for this specific track
   relativePopularity: number; // [calculated] 0–1, compared to artist's top track
 };

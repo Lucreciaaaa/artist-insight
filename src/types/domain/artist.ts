@@ -3,11 +3,6 @@
 export type ArtistIdentity = {
   id: string; // mbid if available, fallback to name
   name: string;
-  imageUrl: {
-    // profile image URL (from Last.fm)
-    small?: string;
-    medium?: string;
-    large?: string;
-  };
+  imageUrl?: string; // profile image URL (from Last.fm)
   tags: string[]; // genre or community tags
 };
