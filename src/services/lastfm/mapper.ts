@@ -34,7 +34,7 @@ export type TopTrackResponse = {
 
 export function mapArtistInfo(response: ArtistInfoResponse): {
   identity: ArtistIdentity;
-  metrics: Pick<ArtistMetrics, 'audience'>;
+  audience: ArtistMetrics['audience'];
 } {
   const artist = response.artist;
   const imageUrl =
@@ -47,12 +47,12 @@ export function mapArtistInfo(response: ArtistInfoResponse): {
       imageUrl,
       tags: artist.tags?.tag.map((t) => t.name) ?? [],
     },
-    metrics: {
-      audience: {
-        listeners: Number(artist.stats.listeners),
-        plays: Number(artist.stats.plays),
-        engagement: Number(artist.stats.plays) / Number(artist.stats.listeners),
-      },
+    audience: {
+      listeners: Number(artist.stats.listeners),
+      plays: Number(artist.stats.plays),
+      engagement:
+        Number(artist.stats.plays) /
+        Math.max(Number(artist.stats.listeners), 1),
     },
   };
 }

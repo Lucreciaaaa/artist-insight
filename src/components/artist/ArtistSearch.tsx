@@ -1,4 +1,10 @@
-const ArtistSearch = () => {
+type ArtistSearchProps = {
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: () => void;
+};
+
+const ArtistSearch = ({ value, onChange, onSubmit }: ArtistSearchProps) => {
   return (
     <div className="relative">
       <svg
@@ -16,6 +22,9 @@ const ArtistSearch = () => {
         id="artist-name"
         name="artist-name"
         type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onSubmit}
         placeholder="Search artist"
         className="
                 w-full h-8

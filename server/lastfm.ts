@@ -42,6 +42,33 @@ app.get('/api/lastfm/artist/:name', async (req: Request, res: Response) => {
   }
 });
 
+// Endpoint to get top tracks of an artist
+app.get(
+  '/api/lastfm/artist/:name/top-tracks',
+  async (req: Request, res: Response) => {
+    const artistName = Array.isArray(req.params.name)
+      ? req.params.name[0]
+      : req.params.name;
+
+    try {
+      const response = await fetch(
+        `https://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=${encodeURIComponent(
+          artistName
+        )}&api_key=${API_KEY}&format=json`
+      );
+
+      if (!response.ok)
+        throw new Error(`Last.fm API returned status ${response.status}`);
+
+      const data = await response.json();
+      res.json(data);
+    } catch (err) {
+      console.error('Error fetching top tracks:', err);
+      res.status(500).json({ error: 'Failed to fetch top tracks' });
+    }
+  }
+);
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });

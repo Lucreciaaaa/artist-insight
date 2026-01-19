@@ -1,6 +1,6 @@
 type MetricItemProps = {
   metricName: string;
-  metricValue: string | number;
+  metricValue: string;
 };
 
 const MetricItem = ({ metricName, metricValue }: MetricItemProps) => {
