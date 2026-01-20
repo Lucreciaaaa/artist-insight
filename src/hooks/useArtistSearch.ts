@@ -44,13 +44,33 @@ export function useArtistSearch(): UseArtistSearchResult {
       const tracksData: TopTrackResponse = await tracksRes.json();
       const topTracks = mapTopTracks(tracksData);
 
+      // Deezer image fetch
+      let deezerImage: string | null = null;
+      try {
+        const deezerRes = await fetch(
+          `http://localhost:4000/api/deezer/artist?q=${encodeURIComponent(query)}`
+        );
+        if (deezerRes.ok) {
+          const deezerData = await deezerRes.json();
+          deezerImage = deezerData.data?.[0]?.picture ?? null;
+        }
+      } catch (err) {
+        console.warn('Deezer fetch failed', err);
+      }
+
       // Metrics calculation (top tracks, engagement)
       const totalPlays = topTracks.reduce((sum, t) => sum + t.playCount, 0);
 
       const engagement =
         audience.listeners > 0 ? totalPlays / audience.listeners : 0;
 
-      setArtist(identity);
+      console.log('Deezer image URL:', deezerImage);
+      console.log('Fallback Last.fm URL:', identity.imageUrl);
+
+      setArtist({
+        ...identity,
+        imageUrl: deezerImage ?? identity.imageUrl,
+      });
       setMetrics({
         audience: {
           listeners: audience.listeners,

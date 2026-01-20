@@ -69,8 +69,30 @@ app.get(
   }
 );
 
+// Endpoint to get artist image from Deezer
+app.get('/api/deezer/artist', async (req: Request, res: Response) => {
+  const query = req.query.q;
+  if (!query || typeof query !== 'string') {
+    return res.status(400).json({ error: 'Missing query parameter' });
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.deezer.com/search/artist?q=${encodeURIComponent(query)}`
+    );
+    if (!response.ok)
+      throw new Error(`Deezer API returned status ${response.status}`);
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('Error fetching Deezer artist:', err);
+    res.status(500).json({ error: 'Failed to fetch Deezer artist' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);
 });
 
-// run npx ts-node server/lastfm.ts
+// run npx ts-node server/server.ts

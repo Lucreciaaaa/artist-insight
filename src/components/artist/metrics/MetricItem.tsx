@@ -9,7 +9,9 @@ const MetricItem = ({ metricName, metricValue }: MetricItemProps) => {
       {/* Metric */}
       <span className="text-xs text-gray-500">{metricName}</span>
       {/* Value */}
-      <span className="text-xs lg:text-sm text-gray-500">{metricValue}</span>
+      <span className="text-xs lg:text-sm text-gray-500 text-right">
+        {metricValue}
+      </span>
     </div>
   );
 };
