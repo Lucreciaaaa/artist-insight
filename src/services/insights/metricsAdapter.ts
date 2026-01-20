@@ -3,6 +3,9 @@
 import type { ArtistMetrics } from '../../types/domain/metrics';
 import type { KeyMetric } from '../../types/ui/metrics';
 
+const formatNumber = (value: number) =>
+  Number.isFinite(value) ? value.toLocaleString() : '—';
+
 export function buildKeyMetrics(metrics: ArtistMetrics): KeyMetric[] {
   const topTrack = metrics.topTracks[0];
 
@@ -10,19 +13,19 @@ export function buildKeyMetrics(metrics: ArtistMetrics): KeyMetric[] {
     {
       id: 'listeners',
       label: 'Listeners',
-      value: metrics.audience.listeners?.toLocaleString() ?? '—',
+      value: formatNumber(metrics.audience.listeners),
     },
     {
       id: 'plays',
       label: 'Plays',
-      value: metrics.audience.plays?.toLocaleString() ?? '—',
+      value: formatNumber(metrics.audience.plays),
     },
     {
       id: 'engagement',
-      label: 'Engagement',
+      label: 'Audience Loyalty',
       value:
         metrics.audience.engagement != null
-          ? `${(metrics.audience.engagement * 100).toFixed(1)}%`
+          ? `~${Math.round(metrics.audience.engagement)} plays / listener`
           : '—',
     },
     {

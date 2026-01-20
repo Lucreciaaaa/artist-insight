@@ -37,22 +37,30 @@ export function mapArtistInfo(response: ArtistInfoResponse): {
   audience: ArtistMetrics['audience'];
 } {
   const artist = response.artist;
-  const imageUrl =
-    artist.image.find((img) => img.size === 'large')?.['#text'] ?? '';
+  const imageUrl = artist.image
+    .map((img) => img['#text'])
+    .find((url) => url && url.length > 0);
+  const listeners = Number(artist.stats.listeners);
+  const plays = Number(artist.stats.plays);
+  const rawTags = artist.tags?.tag.map((t) => t.name) ?? [];
+
+  const safeListeners = Number.isFinite(listeners) ? listeners : 0;
+  const safePlays = Number.isFinite(plays) ? plays : 0;
+  const normalizedTags = Array.from(
+    new Set(rawTags.map((tag) => tag.toLowerCase()))
+  );
 
   return {
     identity: {
       id: artist.mbid ?? `${artist.name}`,
       name: artist.name,
-      imageUrl,
-      tags: artist.tags?.tag.map((t) => t.name) ?? [],
+      imageUrl: imageUrl,
+      tags: normalizedTags,
     },
     audience: {
-      listeners: Number(artist.stats.listeners),
-      plays: Number(artist.stats.plays),
-      engagement:
-        Number(artist.stats.plays) /
-        Math.max(Number(artist.stats.listeners), 1),
+      listeners: safeListeners,
+      plays: safePlays,
+      engagement: safePlays / safeListeners,
     },
   };
 }
@@ -65,19 +73,29 @@ export function mapTopTracks(response: TopTrackResponse): TrackMetric[] {
 
   if (!tracks.length) return [];
 
-  const topPlayCount = Number(tracks[0].playcount);
-
-  return tracks.map((track) => {
-    const playCount = Number(track.playcount);
-    const rank = track.rank ?? '0';
+  // parsing & normalisation
+  const parsedTracks = tracks.map((track, index) => {
+    const rawPlayCount = Number(track.playcount);
+    const playCount = Number.isFinite(rawPlayCount) ? rawPlayCount : 0;
 
     return {
-      id: track.mbid ?? `${artistName}-${track.name}-${rank}`,
+      id: track.mbid || `${artistName}-${track.name}-${index}`,
       artistName,
       title: track.name,
-      trackRank: Number(rank),
+      trackRank: index + 1,
       playCount,
-      relativePopularity: playCount / topPlayCount,
+      relativePopularity: 0, // calculated after
     };
   });
+
+  // relative popularity
+  const totalPlays = parsedTracks.reduce(
+    (sum, track) => sum + track.playCount,
+    0
+  );
+  const safeTotalPlays = Math.max(totalPlays, 1);
+  return parsedTracks.map((track) => ({
+    ...track,
+    relativePopularity: track.playCount / safeTotalPlays,
+  }));
 }
