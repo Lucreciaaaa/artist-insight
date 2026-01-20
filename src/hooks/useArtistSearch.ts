@@ -64,9 +64,6 @@ export function useArtistSearch(): UseArtistSearchResult {
       const engagement =
         audience.listeners > 0 ? totalPlays / audience.listeners : 0;
 
-      console.log('Deezer image URL:', deezerImage);
-      console.log('Fallback Last.fm URL:', identity.imageUrl);
-
       setArtist({
         ...identity,
         imageUrl: deezerImage ?? identity.imageUrl,
