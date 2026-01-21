@@ -20,7 +20,7 @@ const ArtistSidebar = ({
   metrics,
 }: ArtistSidebarProps) => {
   return (
-    <aside className="flex flex-col w-full bg-[#121212] lg:w-96 lg:shrink-0">
+    <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0">
       <div className="p-4 space-y-6">
         <div>
           <ArtistProfile artist={artist} />
