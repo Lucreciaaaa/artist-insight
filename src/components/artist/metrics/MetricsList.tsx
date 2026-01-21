@@ -6,6 +6,8 @@ type MetricsListProps = {
 };
 
 const MetricsList = ({ metrics }: MetricsListProps) => {
+  if (metrics.length === 0) return null;
+
   return (
     <div>
       {/* Title */}
@@ -14,19 +16,15 @@ const MetricsList = ({ metrics }: MetricsListProps) => {
       </h3>
 
       {/* Items */}
-      {metrics.length === 0 ? (
-        <p className="text-sm text-gray-500"> No metrics available</p>
-      ) : (
-        <div className="divide-y divide-gray-800">
-          {metrics.map((metric) => (
-            <MetricItem
-              key={metric.id}
-              metricName={metric.label}
-              metricValue={metric.value}
-            />
-          ))}
-        </div>
-      )}
+      <div className="divide-y divide-gray-800">
+        {metrics.map((metric) => (
+          <MetricItem
+            key={metric.id}
+            metricName={metric.label}
+            metricValue={metric.value}
+          />
+        ))}
+      </div>
     </div>
   );
 };

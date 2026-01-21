@@ -6,11 +6,7 @@ type ArtistProfileProps = {
 
 const ArtistProfile = ({ artist }: ArtistProfileProps) => {
   if (!artist) {
-    return (
-      <div className="h-14 flex items-center text-gray-500 text-sm">
-        No artist selected
-      </div>
-    );
+    return null;
   }
 
   return (

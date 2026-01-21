@@ -2,6 +2,7 @@ type ArtistSearchProps = {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
+  disabled?: boolean;
 };
 
 const ArtistSearch = ({ value, onChange, onSubmit }: ArtistSearchProps) => {
@@ -36,6 +37,7 @@ const ArtistSearch = ({ value, onChange, onSubmit }: ArtistSearchProps) => {
                 text-gray-200
                 placeholder:text-gray-600
                 focus:outline-none focus:ring-1 focus:ring-gray-700
+                 disabled:cursor-not-allowed
               "
       />
     </div>
