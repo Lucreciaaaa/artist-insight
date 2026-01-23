@@ -27,6 +27,7 @@ export default function App() {
         onSearchSubmit={() => search(artistQuery)}
         artist={artist}
         metrics={keyMetrics}
+        topTracks={metrics?.topTracks ?? []}
       />
     </div>
   );

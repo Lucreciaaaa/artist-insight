@@ -32,6 +32,11 @@ export type TopTrackResponse = {
   };
 };
 
+export type BarChartData = {
+  labels: string[];
+  values: number[];
+};
+
 export function mapArtistInfo(response: ArtistInfoResponse): {
   identity: ArtistIdentity;
   audience: ArtistMetrics['audience'];
@@ -82,11 +87,13 @@ export function mapTopTracks(response: TopTrackResponse): TrackMetric[] {
       id: track.mbid || `${artistName}-${track.name}-${index}`,
       artistName,
       title: track.name,
-      trackRank: index + 1,
+      trackRank: 0, // calculated after
       playCount,
       relativePopularity: 0, // calculated after
     };
   });
+
+  const sortedTracks = parsedTracks.sort((a, b) => b.playCount - a.playCount);
 
   // relative popularity
   const totalPlays = parsedTracks.reduce(
@@ -94,8 +101,25 @@ export function mapTopTracks(response: TopTrackResponse): TrackMetric[] {
     0
   );
   const safeTotalPlays = Math.max(totalPlays, 1);
-  return parsedTracks.map((track) => ({
+  return sortedTracks.map((track, index) => ({
     ...track,
+    trackRank: index + 1,
     relativePopularity: track.playCount / safeTotalPlays,
   }));
+}
+
+export function mapTopTracksToBarChart(
+  tracks: TrackMetric[],
+  limit = 6
+): BarChartData {
+  if (!tracks.length) {
+    return { labels: [], values: [] };
+  }
+
+  const topTracks = tracks.slice(0, limit);
+
+  return {
+    labels: topTracks.map((track) => track.title),
+    values: topTracks.map((track) => track.playCount),
+  };
 }

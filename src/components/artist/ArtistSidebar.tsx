@@ -8,6 +8,10 @@ import type { ArtistIdentity } from '../../types/domain/artist';
 import type { KeyMetric } from '../../types/ui/metrics';
 import type { ArtistSidebarState } from '../../types/ui/artist/sidebar';
 import EmptyState from '../ui/EmptyState';
+import BarChart from './charts/BarChart';
+import type { TrackMetric } from '../../types/domain/metrics';
+
+import { mapTopTracksToBarChart } from '../../services/lastfm/mapper';
 
 type ArtistSidebarProps = {
   artistQuery: string;
@@ -15,6 +19,7 @@ type ArtistSidebarProps = {
   onSearchSubmit: () => void;
   artist: ArtistIdentity | null;
   metrics: KeyMetric[];
+  topTracks: TrackMetric[];
   error?: string | null;
 };
 
@@ -24,8 +29,12 @@ const ArtistSidebar = ({
   onSearchSubmit,
   artist,
   metrics,
+  topTracks,
   error,
 }: ArtistSidebarProps) => {
+  const sortedTracks = [...topTracks].sort((a, b) => b.playCount - a.playCount);
+  const barChartData = mapTopTracksToBarChart(sortedTracks);
+
   const sidebarState: ArtistSidebarState = error
     ? 'error'
     : !artist
@@ -80,7 +89,7 @@ const ArtistSidebar = ({
 
     case 'ready':
       return (
-        <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0">
+        <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0 lg:overflow-y-auto">
           <div className="p-4 space-y-6">
             <ArtistProfile artist={artist} />
             <ArtistSearch
@@ -89,6 +98,10 @@ const ArtistSidebar = ({
               onSubmit={onSearchSubmit}
             />
             <MetricsList metrics={metrics} />
+            <BarChart
+              labels={barChartData.labels}
+              values={barChartData.values}
+            />
           </div>
         </aside>
       );
