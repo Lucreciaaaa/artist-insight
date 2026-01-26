@@ -2,13 +2,13 @@
 import ArtistProfile from './ArtistProfile';
 import ArtistSearch from './ArtistSearch';
 import MetricsList from './metrics/MetricsList';
+import EmptyState from '../ui/EmptyState';
+import BarChart from './charts/BarChart';
 
 // types
 import type { ArtistIdentity } from '../../types/domain/artist';
 import type { KeyMetric } from '../../types/ui/metrics';
 import type { ArtistSidebarState } from '../../types/ui/artist/sidebar';
-import EmptyState from '../ui/EmptyState';
-import BarChart from './charts/BarChart';
 import type { TrackMetric } from '../../types/domain/metrics';
 
 import { mapTopTracksToBarChart } from '../../services/lastfm/mapper';
@@ -32,9 +32,6 @@ const ArtistSidebar = ({
   topTracks,
   error,
 }: ArtistSidebarProps) => {
-  const sortedTracks = [...topTracks].sort((a, b) => b.playCount - a.playCount);
-  const barChartData = mapTopTracksToBarChart(sortedTracks);
-
   const sidebarState: ArtistSidebarState = error
     ? 'error'
     : !artist
@@ -43,69 +40,55 @@ const ArtistSidebar = ({
         ? 'empty'
         : 'ready';
 
-  switch (sidebarState) {
-    case 'error':
-      return (
-        <aside className="flex flex-col w-full bg-[#121212] lg:w-120 lg:shrink-0">
-          <div className="p-4 space-y-6">
-            <ArtistSearch
-              value={artistQuery}
-              onChange={onArtistQueryChange}
-              onSubmit={onSearchSubmit}
-            />
-            <EmptyState message={error ?? 'Something went wrong'} />
-          </div>
-        </aside>
-      );
+  const renderContent = () => {
+    switch (sidebarState) {
+      case 'error':
+        return <EmptyState message={error ?? 'Something went wrong'} />;
 
-    case 'idle':
-      return (
-        <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0">
-          <div className="p-4 space-y-6">
-            <EmptyState message="Search for an artist to see metrics" />
-            <ArtistSearch
-              value={artistQuery}
-              onChange={onArtistQueryChange}
-              onSubmit={onSearchSubmit}
-            />
-          </div>
-        </aside>
-      );
+      case 'idle':
+        return <EmptyState message="Search for an artist to see metrics" />;
 
-    case 'empty':
-      return (
-        <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0">
-          <div className="p-4 space-y-6">
+      case 'empty':
+        return (
+          <>
             <ArtistProfile artist={artist} />
-            <ArtistSearch
-              value={artistQuery}
-              onChange={onArtistQueryChange}
-              onSubmit={onSearchSubmit}
-            />
             <EmptyState message="No metrics available for this artist" />
-          </div>
-        </aside>
-      );
+          </>
+        );
 
-    case 'ready':
-      return (
-        <aside className="flex flex-col w-full bg-[#121212]  lg:w-120 lg:shrink-0 lg:overflow-y-auto">
-          <div className="p-4 space-y-6">
+      case 'ready': {
+        const sortedTracks = [...topTracks].sort(
+          (a, b) => b.playCount - a.playCount
+        );
+        const barChartData = mapTopTracksToBarChart(sortedTracks);
+
+        return (
+          <>
             <ArtistProfile artist={artist} />
-            <ArtistSearch
-              value={artistQuery}
-              onChange={onArtistQueryChange}
-              onSubmit={onSearchSubmit}
-            />
             <MetricsList metrics={metrics} />
             <BarChart
               labels={barChartData.labels}
               values={barChartData.values}
             />
-          </div>
-        </aside>
-      );
-  }
+          </>
+        );
+      }
+    }
+  };
+
+  return (
+    <aside className="flex flex-col w-full bg-[#121212] lg:w-[480px] 2xl:w-[600px] lg:shrink-0 lg:overflow-y-auto">
+      <div className="p-4 space-y-6">
+        <ArtistSearch
+          value={artistQuery}
+          onChange={onArtistQueryChange}
+          onSubmit={onSearchSubmit}
+        />
+
+        {renderContent()}
+      </div>
+    </aside>
+  );
 };
 
 export default ArtistSidebar;

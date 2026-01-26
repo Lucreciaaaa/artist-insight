@@ -1,12 +1,23 @@
+import { MarkdownInsight } from './mapper/MarkdownInsight';
+
 type Props = {
   content: string | null;
+  variant: 'insight' | 'message';
 };
 
-const InsightContent = ({ content }: Props) => {
+const InsightContent = ({ content, variant }: Props) => {
+  if (!content) return null;
   return (
-    <div className="flex-1 p-4 sm:px-6 lg:px-12 w-full lg:overflow-y-auto">
-      <div className="flex h-full justify-center items-center">
-        <p className="text-gray-500 text-center max-w-md">{content}</p>
+    <div
+      className={`flex flex-1 w-full lg:overflow-y-auto
+    ${variant === 'message' ? 'justify-center items-center' : 'p-4 sm:px-6 lg:px-12'}`}
+    >
+      <div className={variant === 'message' ? 'max-w-md px-4' : 'flex h-full'}>
+        {variant === 'insight' ? (
+          <MarkdownInsight mdContent={content} />
+        ) : (
+          <p className="text-gray-500 text-center">{content}</p>
+        )}
       </div>
     </div>
   );

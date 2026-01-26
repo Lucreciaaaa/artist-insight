@@ -1,40 +1,73 @@
-import type { InsightStatus } from '../../types/ui/insight/status';
 import InsightHeader from './InsightHeader';
 import InsightContent from './InsightContent';
-import type { ArtistIdentity } from '../../types/domain/artist';
 
 type InsightManagerProps = {
-  status: InsightStatus;
-  artist: ArtistIdentity | null;
+  insight: string | null;
+  loading: boolean;
+  error: string | null;
   onGenerateInsight: () => void;
+  canGenerate: boolean;
+  onClear: () => void;
 };
 
 const InsightManager = ({
-  status,
-  artist,
+  insight,
+  loading,
+  error,
   onGenerateInsight,
+  canGenerate,
+  onClear,
 }: InsightManagerProps) => {
+  const hasInsight = Boolean(insight && insight.trim().length > 0);
+  const isEmpty = !loading && !error && !hasInsight;
+
   return (
     <div className="flex flex-col grow min-w-0 bg-black h-full">
       <InsightHeader
         onGenerateInsight={onGenerateInsight}
-        isLoading={status === 'loading'}
+        isLoading={loading}
+        hasResult={hasInsight}
+        disabled={!canGenerate}
+        onClear={onClear}
       />
 
-      {status === 'empty' && (
-        <InsightContent content="Click 'Generate Insight' to receive an AI-powered analysis of this artist's performance." />
+      {loading && (
+        <InsightContent content="Generating insight..." variant="message" />
       )}
 
-      {status === 'loading' && (
-        <InsightContent content="Generating insight..." />
+      {error && (
+        <InsightContent
+          content="Failed generating analysis"
+          variant="message"
+        />
       )}
 
-      {status === 'success' && artist && (
-        <InsightContent content={`Artist name: ${artist.name}`} />
+      {isEmpty && (
+        <InsightContent
+          content="Click 'Generate Insight' to receive an AI-powered analysis of this artist's performance."
+          variant="message"
+        />
       )}
 
-      {status === 'error' && (
-        <InsightContent content="Failed generating analysis" />
+      {hasInsight && (
+        <>
+          <InsightContent content={insight} variant="insight" />
+
+          <div className="pt-6 border-t border-gray-800 px-6 mb-3 mt-5">
+            <div className="flex items-center justify-between gap-6">
+              <p className="text-xs text-gray-600 leading-relaxed flex-1">
+                This analysis is indicative and intended to support
+                decision-making.
+              </p>
+              <button
+                className="flex gap-2 px-4 py-2 border border-gray-700 rounded-lg
+                         hover:bg-gray-900 transition-colors text-sm text-gray-400 shrink-0"
+              >
+                Copy Insight
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

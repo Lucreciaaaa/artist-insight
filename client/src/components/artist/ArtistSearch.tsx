@@ -25,7 +25,11 @@ const ArtistSearch = ({ value, onChange, onSubmit }: ArtistSearchProps) => {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onKeyDown={onSubmit}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            onSubmit();
+          }
+        }}
         placeholder="Search artist"
         className="
                 w-full h-8
