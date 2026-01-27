@@ -1,5 +1,6 @@
 import InsightHeader from './InsightHeader';
 import InsightContent from './InsightContent';
+import CopyButton from '../ui/CopyButton';
 
 type InsightManagerProps = {
   insight: string | null;
@@ -59,12 +60,7 @@ const InsightManager = ({
                 This analysis is indicative and intended to support
                 decision-making.
               </p>
-              <button
-                className="flex gap-2 px-4 py-2 border border-gray-700 rounded-lg
-                         hover:bg-gray-900 transition-colors text-sm text-gray-400 shrink-0"
-              >
-                Copy Insight
-              </button>
+              <CopyButton targetText={insight || ''} />
             </div>
           </div>
         </>
