@@ -48,12 +48,14 @@ ${JSON.stringify(topTracks, null, 2)}
 
 ### ANALYSIS RULES (MANDATORY — NO EXCEPTIONS)
 
-- Base your analysis ONLY on the provided data. (No external inference or unjustified enrichment).
-- Interpret patterns and signals; DO NOT repeat raw values.
+- Base your analysis ONLY on the provided data.
+- Interpret patterns and signals; DO NOT restate the full dataset or list raw metrics.
+- You MAY reference numeric values sparingly to support interpretation.
 - DO NOT recompute, estimate, normalize, or extrapolate metrics.
 - Treat all numeric values as already validated.
 - Avoid promotional, marketing, or fan-oriented language.
 - Maintain a neutral, professional analyst tone.
+- Do not soften negative signals or artificially balance them unless supported by the data.
 
 ---
 
@@ -76,13 +78,17 @@ ${JSON.stringify(topTracks, null, 2)}
 ### SECTION EXPECTATIONS
 
 ## Summary
-Provide a high-level assessment of the artist’s current performance and audience behavior.
+Provide a high-level but data-grounded assessment of the artist’s current performance and audience behavior.
 Indicate whether engagement appears stable, concentrated, or fragile.
+This is a broad presentation of the artist's performances;
+when presenting them, mention the artist name explicitly.
 
 ## Key Driver
 Identify the primary structural factor explaining current performance
 (e.g. catalog concentration, replay intensity, audience scale).
-Support your claim with interpreted signals from the data.
+Support your claim with interpreted signals from the data. 
+You may reference numeric values to provide concrete examples.
+You may reference insights derived from any part of the provided structured input.
 
 ## Risk / Opportunity
 Describe one clear risk and one clear opportunity derived from the data.

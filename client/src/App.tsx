@@ -12,24 +12,20 @@ import { useLLM } from './hooks/useLLM';
 import { buildKeyMetrics } from './services/insights/metricsAdapter';
 
 export default function App() {
-  const [artistQuery, setArtistQuery] = useState('');
-  const { artist, metrics, search } = useArtistSearch();
-  const { result, generate, loading, error, reset } = useLLM();
+  const [artistQuery, setArtistQuery] = useState(() => {
+    return localStorage.getItem('artistQuery') ?? '';
+  });
+  const { artist, metrics, search, loadingArtist, errorArtist } =
+    useArtistSearch();
+  const { result, generate, loadingInsight, errorInsight, reset } = useLLM();
 
-  // hydrate artistQuery from localStorage on initial load
   useEffect(() => {
-    const savedQuery = localStorage.getItem('artistQuery');
-
-    if (savedQuery) {
-      // setTimeout to avoid "cascading renders" warning (linter)
-      setTimeout(() => {
-        setArtistQuery(savedQuery);
-        search(savedQuery);
-      }, 0);
+    if (artistQuery) {
+      search(artistQuery);
     }
-  }, [search]);
+  }, []);
 
-  // persist artistQuery to localstorage when it changes
+  // persist artistquery to localstorage when it changes
   useEffect(() => {
     if (artistQuery) {
       localStorage.setItem('artistQuery', artistQuery);
@@ -40,9 +36,7 @@ export default function App() {
 
   // reset LLM insight when artist changes
   useEffect(() => {
-    if (artist) {
-      reset();
-    }
+    if (artist) reset();
   }, [artist, reset]);
 
   // key metrics for sidebar display
@@ -59,18 +53,20 @@ export default function App() {
     reset();
   };
 
-  const canGenerateInsight = Boolean(artist && metrics && !loading && !result);
+  const canGenerateInsight = Boolean(
+    artist && metrics && !loadingInsight && !result
+  );
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       {/* Insight manager panel */}
       <InsightManager
         insight={result}
-        loading={loading}
-        error={error}
+        loading={loadingInsight}
+        error={errorInsight}
         onGenerateInsight={handleGenerateInsight}
         canGenerate={canGenerateInsight}
-        onClear={handleClear} // clear artist + insight
+        onClear={handleClear}
       />
 
       {/* Sidebar with artist search and metrics */}
@@ -81,6 +77,8 @@ export default function App() {
         artist={artist}
         metrics={keyMetrics}
         topTracks={metrics?.topTracks ?? []}
+        loading={loadingArtist}
+        error={errorArtist}
       />
     </div>
   );

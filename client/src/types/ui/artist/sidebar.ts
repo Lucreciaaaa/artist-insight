@@ -3,4 +3,5 @@ export type ArtistSidebarState =
   | 'searching'
   | 'ready'
   | 'empty'
-  | 'error';
+  | 'error'
+  | 'loading';

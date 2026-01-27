@@ -10,14 +10,14 @@ type LLMResponse = {
 const BACKEND_URL = 'http://localhost:4000';
 
 export function useLLM() {
-  const [loading, setLoading] = useState(false);
+  const [loadingInsight, setLoadingInsight] = useState(false);
   const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [errorInsight, setErrorInsight] = useState<string | null>(null);
 
   const reset = () => {
-    setLoading(false);
+    setLoadingInsight(false);
     setResult(null);
-    setError(null);
+    setErrorInsight(null);
   };
 
   const generate = async (
@@ -25,8 +25,8 @@ export function useLLM() {
     metrics: ArtistMetrics,
     extraPrompt?: string
   ) => {
-    setLoading(true);
-    setError(null);
+    setLoadingInsight(true);
+    setErrorInsight(null);
 
     try {
       const prompt =
@@ -46,10 +46,10 @@ export function useLLM() {
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
+      setErrorInsight(errorMessage);
       setResult(null);
     } finally {
-      setLoading(false);
+      setLoadingInsight(false);
     }
   };
 
@@ -58,5 +58,5 @@ export function useLLM() {
     setResult(savedResult);
   };
 
-  return { generate, result, loading, error, reset, hydrate };
+  return { generate, result, loadingInsight, errorInsight, reset, hydrate };
 }

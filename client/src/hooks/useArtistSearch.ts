@@ -13,15 +13,21 @@ import { mapArtistInfo, mapTopTracks } from '../services/lastfm/mapper';
 type UseArtistSearchResult = {
   artist: ArtistIdentity | null;
   metrics: ArtistMetrics | null;
+  loadingArtist: boolean;
+  errorArtist: string | null;
   search: (query: string) => Promise<void>;
 };
 
 export function useArtistSearch(): UseArtistSearchResult {
   const [artist, setArtist] = useState<ArtistIdentity | null>(null);
   const [metrics, setMetrics] = useState<ArtistMetrics | null>(null);
+  const [loadingArtist, setLoadingArtist] = useState(false);
+  const [errorArtist, setErrorArtist] = useState<string | null>(null);
 
   const search = async (query: string) => {
     if (!query.trim()) return;
+    setLoadingArtist(true);
+    setErrorArtist(null);
 
     try {
       // Artist info fetch
@@ -80,8 +86,11 @@ export function useArtistSearch(): UseArtistSearchResult {
       console.error(error);
       setArtist(null);
       setMetrics(null);
+      setErrorArtist('Artist not found or network error');
+    } finally {
+      setLoadingArtist(false);
     }
   };
 
-  return { artist, metrics, search };
+  return { artist, metrics, search, loadingArtist, errorArtist };
 }

@@ -20,6 +20,7 @@ type ArtistSidebarProps = {
   artist: ArtistIdentity | null;
   metrics: KeyMetric[];
   topTracks: TrackMetric[];
+  loading: boolean;
   error?: string | null;
 };
 
@@ -31,14 +32,17 @@ const ArtistSidebar = ({
   metrics,
   topTracks,
   error,
+  loading,
 }: ArtistSidebarProps) => {
   const sidebarState: ArtistSidebarState = error
     ? 'error'
-    : !artist
-      ? 'idle'
-      : metrics.length === 0
-        ? 'empty'
-        : 'ready';
+    : loading
+      ? 'loading'
+      : !artist
+        ? 'idle'
+        : metrics.length === 0
+          ? 'empty'
+          : 'ready';
 
   const renderContent = () => {
     switch (sidebarState) {
@@ -55,6 +59,9 @@ const ArtistSidebar = ({
             <EmptyState message="No metrics available for this artist" />
           </>
         );
+
+      case 'loading':
+        return <EmptyState message="Loading ..." />;
 
       case 'ready': {
         const sortedTracks = [...topTracks].sort(
