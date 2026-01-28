@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchArtistImage } from "../services/deezer.service";
+import { fetchArtistImage } from "../services/deezer.service.js";
 
 const router = Router();
 

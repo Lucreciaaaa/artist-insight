@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { fetchArtistInfo, fetchTopTracks } from "../services/lastfm.service";
+import { fetchArtistInfo, fetchTopTracks } from "../services/lastfm.service.js";
 
 const router = Router();
 

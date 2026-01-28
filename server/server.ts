@@ -3,9 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 // Routes
-import deezerRoutes from "./routes/deezer.routes";
-import lastfmRoutes from "./routes/lastfm.routes";
-import llmRoutes from "./routes/llm.routes";
+import deezerRoutes from "./routes/deezer.routes.js";
+import lastfmRoutes from "./routes/lastfm.routes.js";
+import llmRoutes from "./routes/llm.routes.js";
 
 dotenv.config();
 
