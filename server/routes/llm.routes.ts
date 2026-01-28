@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { generateInsights } from "../services/llm.service.js";
+import { generateInsights } from "../services/llm.service";
 
 const router = Router();
 
