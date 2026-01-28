@@ -15,17 +15,14 @@ export default function App() {
   const [artistQuery, setArtistQuery] = useState(() => {
     return localStorage.getItem('artistQuery') ?? '';
   });
-  const { artist, metrics, search, loadingArtist, errorArtist } =
+
+  // hooks
+  const { artist, metrics, search, loadingArtist, errorArtist, resetSearch } =
     useArtistSearch();
-  const { result, generate, loadingInsight, errorInsight, reset } = useLLM();
+  const { result, generate, loadingInsight, errorInsight, resetInsight } =
+    useLLM();
 
-  useEffect(() => {
-    if (artistQuery) {
-      search(artistQuery);
-    }
-  }, []);
-
-  // persist artistquery to localstorage when it changes
+  // persist query
   useEffect(() => {
     if (artistQuery) {
       localStorage.setItem('artistQuery', artistQuery);
@@ -34,28 +31,42 @@ export default function App() {
     }
   }, [artistQuery]);
 
-  // reset LLM insight when artist changes
-  useEffect(() => {
-    if (artist) reset();
-  }, [artist, reset]);
-
   // key metrics for sidebar display
   const keyMetrics = metrics ? buildKeyMetrics(metrics) : [];
 
+  const canGenerateInsight = Boolean(
+    artist &&
+    metrics &&
+    !loadingInsight &&
+    !result &&
+    artist.name.toLowerCase() === artistQuery.toLowerCase()
+  );
+
+  // User actions
+  const handleSearchSubmit = async () => {
+    const trimmedQuery = artistQuery.trim();
+    if (!trimmedQuery) return;
+    try {
+      await search(trimmedQuery);
+      resetInsight();
+    } catch (e) {
+      console.error('Search error :', e);
+    }
+  };
+
   const handleGenerateInsight = () => {
-    if (!artist || !metrics) return;
+    if (!artist || !metrics || loadingInsight) return;
     generate(artist, metrics);
   };
 
-  const handleClear = () => {
-    setArtistQuery('');
-    localStorage.removeItem('artistQuery');
-    reset();
+  const handleClearQuery = () => setArtistQuery('');
+  const handleClearInsight = () => resetInsight();
+  const handleClearSearch = () => resetSearch();
+  const handleClearAll = () => {
+    handleClearQuery();
+    handleClearInsight();
+    handleClearSearch();
   };
-
-  const canGenerateInsight = Boolean(
-    artist && metrics && !loadingInsight && !result
-  );
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
@@ -66,14 +77,14 @@ export default function App() {
         error={errorInsight}
         onGenerateInsight={handleGenerateInsight}
         canGenerate={canGenerateInsight}
-        onClear={handleClear}
+        onClear={handleClearAll}
       />
 
       {/* Sidebar with artist search and metrics */}
       <ArtistSidebar
         artistQuery={artistQuery}
         onArtistQueryChange={setArtistQuery}
-        onSearchSubmit={() => search(artistQuery)}
+        onSearchSubmit={handleSearchSubmit}
         artist={artist}
         metrics={keyMetrics}
         topTracks={metrics?.topTracks ?? []}

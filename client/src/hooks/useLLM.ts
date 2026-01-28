@@ -14,7 +14,7 @@ export function useLLM() {
   const [result, setResult] = useState<string | null>(null);
   const [errorInsight, setErrorInsight] = useState<string | null>(null);
 
-  const reset = () => {
+  const resetInsight = () => {
     setLoadingInsight(false);
     setResult(null);
     setErrorInsight(null);
@@ -58,5 +58,12 @@ export function useLLM() {
     setResult(savedResult);
   };
 
-  return { generate, result, loadingInsight, errorInsight, reset, hydrate };
+  return {
+    generate,
+    result,
+    loadingInsight,
+    errorInsight,
+    resetInsight,
+    hydrate,
+  };
 }

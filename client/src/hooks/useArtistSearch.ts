@@ -16,6 +16,7 @@ type UseArtistSearchResult = {
   loadingArtist: boolean;
   errorArtist: string | null;
   search: (query: string) => Promise<void>;
+  resetSearch: () => void;
 };
 
 export function useArtistSearch(): UseArtistSearchResult {
@@ -23,6 +24,12 @@ export function useArtistSearch(): UseArtistSearchResult {
   const [metrics, setMetrics] = useState<ArtistMetrics | null>(null);
   const [loadingArtist, setLoadingArtist] = useState(false);
   const [errorArtist, setErrorArtist] = useState<string | null>(null);
+
+  const resetSearch = () => {
+    setArtist(null);
+    setMetrics(null);
+    setErrorArtist(null);
+  };
 
   const search = async (query: string) => {
     if (!query.trim()) return;
@@ -92,5 +99,5 @@ export function useArtistSearch(): UseArtistSearchResult {
     }
   };
 
-  return { artist, metrics, search, loadingArtist, errorArtist };
+  return { artist, metrics, search, loadingArtist, errorArtist, resetSearch };
 }
