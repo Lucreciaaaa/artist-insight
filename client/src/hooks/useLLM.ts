@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import { generateArtistInsightsPrompt } from '../constants/prompts';
+
 import type { ArtistIdentity } from '../types/domain/artist';
-import { ArtistMetrics } from '../types/domain/metrics';
+import type { ArtistMetrics } from '../types/domain/metrics';
 
 type LLMResponse = {
   result: string;

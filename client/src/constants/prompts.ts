@@ -1,5 +1,5 @@
-import { ArtistIdentity } from '../types/domain/artist';
-import { ArtistMetrics } from '../types/domain/metrics';
+import type { ArtistIdentity } from '../types/domain/artist';
+import type { ArtistMetrics } from '../types/domain/metrics';
 
 export function generateArtistInsightsPrompt(
   artist: ArtistIdentity,
