@@ -39,7 +39,7 @@ export default function App() {
     metrics &&
     !loadingInsight &&
     !result &&
-    artist.name.toLowerCase() === artistQuery.toLowerCase()
+    artist.name.trim().toLowerCase() === artistQuery.trim().toLowerCase()
   );
 
   // User actions
@@ -69,7 +69,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-[100dvh]">
       {/* Insight manager panel */}
       <InsightManager
         insight={result}
