@@ -23,7 +23,12 @@ const InsightManager = ({
   const isEmpty = !loading && !error && !hasInsight;
 
   return (
-    <div className="flex flex-col grow min-w-0 bg-black h-full">
+    <div
+      className="flex flex-col
+                 grow
+                 min-w-0 min-h-0 
+               bg-black"
+    >
       <InsightHeader
         onGenerateInsight={onGenerateInsight}
         isLoading={loading}

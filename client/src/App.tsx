@@ -69,7 +69,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-[100dvh]">
+    <div className="flex flex-col lg:flex-row min-h-screen">
       {/* Insight manager panel */}
       <InsightManager
         insight={result}

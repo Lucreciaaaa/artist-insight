@@ -84,7 +84,14 @@ const ArtistSidebar = ({
   };
 
   return (
-    <aside className="flex flex-col w-full bg-[#121212] lg:w-[480px] 2xl:w-[600px] lg:shrink-0 lg:overflow-y-auto">
+    <aside
+      className="flex flex-col
+     bg-[#121212] 
+    w-full  
+    lg:w-[480px] 2xl:w-[600px]
+     lg:shrink-0 
+     lg:overflow-y-auto "
+    >
       <div className="p-4 space-y-6">
         <ArtistSearch
           value={artistQuery}
