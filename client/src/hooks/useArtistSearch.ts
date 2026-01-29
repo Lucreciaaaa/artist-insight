@@ -1,14 +1,23 @@
 import { useState } from 'react';
 
-//types
+// types
 import type { ArtistIdentity } from '../types/domain/artist';
 import type { ArtistMetrics } from '../types/domain/metrics';
-import {
-  type ArtistInfoResponse,
-  type TopTrackResponse,
+import type {
+  ArtistInfoResponse,
+  TopTrackResponse,
 } from '../services/lastfm/mapper';
 
 import { mapArtistInfo, mapTopTracks } from '../services/lastfm/mapper';
+
+import { BACKEND_URL } from '../constants/env';
+
+if (!BACKEND_URL) {
+  console.error(
+    'Critical Front-end Error: The environment variable VITE_API_URL is not configured.'
+  );
+  throw new Error('BACKEND_URL is not defined. check');
+}
 
 type UseArtistSearchResult = {
   artist: ArtistIdentity | null;
@@ -33,13 +42,14 @@ export function useArtistSearch(): UseArtistSearchResult {
 
   const search = async (query: string) => {
     if (!query.trim()) return;
+
     setLoadingArtist(true);
     setErrorArtist(null);
 
     try {
       // Artist info fetch
       const artistRes = await fetch(
-        `http://localhost:4000/api/lastfm/artist/${encodeURIComponent(query)}`
+        `${BACKEND_URL}/api/lastfm/artist/${encodeURIComponent(query)}`
       );
       if (!artistRes.ok) throw new Error('Artist fetch failed');
 
@@ -48,9 +58,7 @@ export function useArtistSearch(): UseArtistSearchResult {
 
       // Top tracks fetch
       const tracksRes = await fetch(
-        `http://localhost:4000/api/lastfm/artist/${encodeURIComponent(
-          query
-        )}/top-tracks`
+        `${BACKEND_URL}/api/lastfm/artist/${encodeURIComponent(query)}/top-tracks`
       );
       if (!tracksRes.ok) throw new Error('Tracks fetch failed');
 
@@ -61,19 +69,21 @@ export function useArtistSearch(): UseArtistSearchResult {
       let deezerImage: string | null = null;
       try {
         const deezerRes = await fetch(
-          `http://localhost:4000/api/deezer/artist?q=${encodeURIComponent(query)}`
+          `${BACKEND_URL}/api/deezer/artist?q=${encodeURIComponent(query)}`
         );
         if (deezerRes.ok) {
           const deezerData = await deezerRes.json();
           deezerImage = deezerData.data?.[0]?.picture ?? null;
         }
       } catch (err) {
-        console.warn('Deezer fetch failed', err);
+        console.warn(
+          'Deezer fetch failed, using LastFM image as fallback.',
+          err
+        );
       }
 
       // Metrics calculation (top tracks, engagement)
       const totalPlays = topTracks.reduce((sum, t) => sum + t.playCount, 0);
-
       const engagement =
         audience.listeners > 0 ? totalPlays / audience.listeners : 0;
 
@@ -81,6 +91,7 @@ export function useArtistSearch(): UseArtistSearchResult {
         ...identity,
         imageUrl: deezerImage ?? identity.imageUrl,
       });
+
       setMetrics({
         audience: {
           listeners: audience.listeners,
@@ -90,7 +101,7 @@ export function useArtistSearch(): UseArtistSearchResult {
         topTracks,
       });
     } catch (error) {
-      console.error(error);
+      console.error('Search error:', error);
       setArtist(null);
       setMetrics(null);
       setErrorArtist('Artist not found or network error');
@@ -99,5 +110,5 @@ export function useArtistSearch(): UseArtistSearchResult {
     }
   };
 
-  return { artist, metrics, search, loadingArtist, errorArtist, resetSearch };
+  return { artist, metrics, loadingArtist, errorArtist, search, resetSearch };
 }

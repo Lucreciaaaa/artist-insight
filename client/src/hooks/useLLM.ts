@@ -5,11 +5,15 @@ import { generateArtistInsightsPrompt } from '../constants/prompts';
 import type { ArtistIdentity } from '../types/domain/artist';
 import type { ArtistMetrics } from '../types/domain/metrics';
 
+import { BACKEND_URL } from '../constants/env';
+
+if (!BACKEND_URL) {
+  throw new Error('VITE_API_URL is not defined in environment variables');
+}
+
 type LLMResponse = {
   result: string;
 };
-
-const BACKEND_URL = 'http://localhost:4000';
 
 export function useLLM() {
   const [loadingInsight, setLoadingInsight] = useState(false);
@@ -41,7 +45,12 @@ export function useLLM() {
         body: JSON.stringify({ prompt }),
       });
 
-      if (!res.ok) throw new Error('LLM request failed');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `Server responded with ${res.status}`
+        );
+      }
 
       const data: LLMResponse = await res.json();
       setResult(data.result);
