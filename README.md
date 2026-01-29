@@ -1,21 +1,23 @@
 # Artist Insight
 
-<p align="center">
+<p>
   <em>LLM-powered analysis of artist performance metrics, transforming raw data into actionable insights.</em>
+  
 </p>
 
+
 <p align="center">
-  <img src="assets/artist-insight-demo.gif" alt="Artist Insight Demo" width="100%" />
+    <img src="https://github.com/user-attachments/assets/2d44f5b1-d4f0-4385-9b65-9ac231ce48f2" alt="Artist Insight Quick Preview" />
 </p>
 
 **Demo:** [https://artist-insight.vercel.app](#)
 
 ---
 
-## 🎬 Quick Preview
+## 🎬 Mobile Preview
 
 <p align="center">
-  <img src="assets/mobile-preview.png" alt="Artist Insight Mobile Preview" width="300" />
+  <img src="https://github.com/user-attachments/assets/b43f0337-9d53-406b-9aff-7d8f023ac703" alt="Mobile Preview" width="300" />
 </p>
 
 ---
@@ -60,7 +62,7 @@ The app focuses on three objectives: delivering **instant summaries**, providing
 
 When designing the app, I focused on clarity and value rather than feature quantity. Charts exist, but the primary deliverable is insight. Displaying only five metrics per artist was a deliberate choice: enough information to be meaningful, yet concise enough to be digestible.
 
-Visually, the app embraces minimalism—white, gray, black—to let data stand out. Including the artist image adds a human touch, reminding users that these metrics reflect real creators. I consciously avoided over-engineering the frontend; a lightweight, component-driven architecture ensures maintainability and responsiveness without unnecessary complexity.
+Visually, the app embraces minimalism (white, gray, black) to let data stand out. Including the artist image adds a human touch, reminding users that these metrics reflect real creators. I consciously avoided over-engineering the frontend; a lightweight, component-driven architecture ensures maintainability and responsiveness without unnecessary complexity.
 
 ---
 
