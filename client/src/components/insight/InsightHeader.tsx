@@ -14,7 +14,7 @@ const InsightHeader = ({
   onClear,
 }: Props) => {
   return (
-    <div className="border-b border-gray-800">
+    <div className="lg:border-b lg:border-gray-800">
       <div className="w-full px-4 py-4 sm:px-6 sm:py-6 lg:px-12 lg:py-8 ">
         <div className="mb-3 lg:mb-6">
           <h1 className="text-white text-xl sm:text-2xl lg:text-3xl mb-1 lg:mb-2">
