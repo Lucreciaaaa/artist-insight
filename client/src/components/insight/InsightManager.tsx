@@ -26,7 +26,8 @@ const InsightManager = ({
     <div
       className="flex flex-col
                  grow
-                 min-w-0 min-h-0 
+                 min-w-0
+                 h-full 
                bg-black"
     >
       <InsightHeader
