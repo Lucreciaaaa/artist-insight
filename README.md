@@ -1,84 +1,177 @@
 # Artist Insight
 
-<p>
-  <em>LLM-powered analysis of artist performance metrics, transforming raw data into actionable insights.</em>
-  
-</p>
+**Artist Insight** is a frontend-focused mini-app that demonstrates how **LLM-driven analysis** can be combined with a clean, responsive interface to transform raw artist metrics into **clear, interpretable insights**.
 
+The core of the project is not the metrics themselves, but the **LLM-powered interpretation layer** that turns imperfect, fragmented data into meaningful signals for decision-making.
 
-<p align="center">
-    <img src="https://github.com/user-attachments/assets/2d44f5b1-d4f0-4385-9b65-9ac231ce48f2" alt="Artist Insight Quick Preview" />
-</p>
+<img width="944" height="431" alt="artist-preview" src="https://github.com/user-attachments/assets/d3289d6a-89a5-409b-86fa-9c8859284e38" />
 
-**Demo:** [https://artist-insight.vercel.app](#)
+**Live demo:** https://artist-insight.vercel.app
 
 ---
 
-## 🎬 Mobile Preview
+## 📱 Responsive Preview
+
+The application is primarily designed for desktop usage (B2B context) but includes a fully responsive layout to ensure usability on smaller screens.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/b43f0337-9d53-406b-9aff-7d8f023ac703" alt="Mobile Preview" width="300" />
+  <img src="https://github.com/user-attachments/assets/ca26df24-c630-4583-b616-695c11c9c6a5" alt="Mobile Preview" width=300  />
 </p>
 
 ---
 
 ## 📖 Project Overview
 
-**Artist Insight** is a **B2B mini-app frontend** designed to turn raw artist performance metrics into **actionable insights** using a **Large Language Model (LLM)**.
+Artist Insight explores a simple question:
 
-I created this tool because I often found myself staring at stats, wondering: _“I have the numbers, but what does it really mean?”_ My goal wasn’t to replace a full analytics platform, but to provide **fast, interpretable insights** that let teams grasp key signals in seconds.
+> _How can we make artist performance metrics immediately understandable, without relying on heavy dashboards or manual analysis?_
 
-The app focuses on three objectives: delivering **instant summaries**, providing **automated interpretations** of complex numbers, and highlighting **opportunities or risks** in performance trends. In essence, it’s a small but sharp lens to understand artist performance without drowning in data.
+Rather than exposing dozens of raw numbers, the app combines:
+
+- a **small, curated set of metrics**
+- a **Large Language Model**
+- a **clear UI**
+
+to produce **concise, structured insights** that highlight performance trends, key drivers, and potential opportunities or risks.
+
+This project was built as a **personal learning project** with a strong focus on frontend architecture, responsive layout, and AI-assisted interfaces.
+
+> This project is not intended for artist discovery.
+> It assumes prior familiarity with the artist and focuses on performance interpretation rather than recommendation.
+
+---
+
+## 🧠 LLM-Centered Approach
+
+The LLM is the **central component** of the application.
+
+Metrics alone are not the end product : they serve as structured input for the model, which generates:
+
+- a high-level performance summary
+- the main factors influencing the results
+- potential opportunities or warning signals
+
+Special attention was given to:
+
+- prompt structure
+- output consistency
+- readability and usefulness of generated insights
+- UX around loading states and incomplete data
+
+The interface exists to **support and contextualize the LLM output**, not the other way around.
+
+---
+
+## 📊 Metric Selection Rationale
+
+> Metrics reflect the latest data available from external APIs at request time.
+
+Only **five core metrics** are displayed intentionally:
+
+- Total listeners
+- Total plays
+- Engagement (plays per listener)
+- Top track
+- Top track share
+
+This choice reflects several constraints and decisions:
+
+- The **Last.fm API provides limited and sometimes biased data**, making metric quality more important than quantity.
+- Engagement (plays per listener) helps distinguish between visibility and actual audience loyalty.
+- Top track share gives quick insight into catalog concentration.
+- A reduced metric set improves readability and avoids dashboard overload.
+
+The goal is not exhaustive analytics, but **fast signal detection**.
 
 ---
 
 ## 🎯 Core Features
 
-- **Artist Search**
-- **Key Metrics Display**: Shows total listeners, plays, audience loyalty, top track, top track share, plus genre tags and profile picture.
-- **LLM-powered Insight Generation**: Produces structured analysis:
-  - Summary of performance
-  - Key driver behind results
-  - Opportunities or risks
-- **Plays per Track Visualization**: Simple descending bar chart for quick visual cues.
-- **Copy-to-Clipboard**: Export insights easily for reports or meetings.
+- Artist search
+- Key metric display with minimal visual noise
+- LLM-generated structured insights
+- Plays-per-track bar chart for quick trend scanning
+- Copy-to-clipboard for easy reuse in reports or discussions
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** React + Vite + TypeScript for scalable, type-safe components.
-- **Styling:** Tailwind CSS for minimalistic and responsive design.
-- **Data Sources:**
-  - LastFM API for artist metrics and top tracks
-  - Deezer API for artist images (fallback when missing)
-- **LLM Integration:** Google Gemini 2.5 Flash via API for insight generation.
-- **Backend:** Lightweight server to handle CORS and cache requests in localStorage.
-- **Deployment:** Vercel for frontend, Render for backend.
+- **Frontend:** React, TypeScript, Vite
+- **Styling:** Tailwind CSS (custom layout, no design system)
+- **APIs:**
+  - Last.fm API for artist metrics and top tracks
+  - Deezer API as a fallback source for artist images
+- **LLM:** Google Gemini 2.5 Flash
+- **Backend:** Node.js, Express
+- **Deployment:** Vercel (frontend), Render (backend)
 
 ---
 
-## ⚙️ Design & Technical Decisions
+## ⚙️ Frontend & Product Decisions
 
-When designing the app, I focused on clarity and value rather than feature quantity. Charts exist, but the primary deliverable is insight. Displaying only five metrics per artist was a deliberate choice: enough information to be meaningful, yet concise enough to be digestible.
+### Layout & Styling
 
-Visually, the app embraces minimalism (white, gray, black) to let data stand out. Including the artist image adds a human touch, reminding users that these metrics reflect real creators. I consciously avoided over-engineering the frontend; a lightweight, component-driven architecture ensures maintainability and responsiveness without unnecessary complexity.
+- Built the layout **from scratch** using Tailwind CSS
+- Constraint-driven design (sidebar, content zones, responsive stacking)
+- Desktop-first B2B interface with responsive adaptations for mobile
+- No design system used intentionally, to focus on CSS fundamentals and layout control
+
+### React Architecture
+
+- Centralized state management in parent components
+- Clear separation between UI components and logic
+- Use of custom hooks for:
+  - artist search and data fetching
+  - LLM interaction and insight generation
+- Explicit data mapping layer between API responses and UI-ready data models
+
+### Visual Choices
+
+- Artist images are included to humanize the data and improve visual engagement
+- Deezer API is used as a supplement due to missing or unreliable images in the Last.fm API
 
 ---
 
 ## 🧪 Challenges & Learnings
 
-Working on Artist Insight was as much a lesson in **product thinking** as it was in coding. On the backend side, combining APIs and handling CORS required pragmatic decisions, but the main focus was on the frontend experience. Ensuring that artist images always display taught me to anticipate missing data gracefully and handle edge cases without breaking the UI.
+- Handling external API limitations (CORS, incomplete data, multiple endpoints)
+- Designing a responsive layout without predefined UI components
+- Structuring React components for clarity and maintainability
+- Mapping imperfect API data into stable, typed frontend models
+- Designing prompts and UI states to ensure usable AI-generated outputs
 
-On the frontend, I learned a lot about structuring React apps for maintainability and clarity. Managing component communication, centralizing logic in parent components, and lifting hooks to share state effectively were key lessons. Designing responsive layouts with Tailwind, from a sidebar on desktop to stacked elements on mobile, pushed me to think carefully about usability across devices.
+---
 
-Integrating the LLM also forced me to consider **UX around AI outputs**: prompts had to be structured so that insights were reliable, readable, and actionable.
+## 🚧 Known Limitations & Next Steps
 
-Overall, these challenges reinforced the importance of **user clarity**, **practical, maintainable frontend design**, and a **scalable approach** that balances functionality with simplicity.
+### Current limitations
+
+- Metrics reflect **current snapshot data** only, without historical evolution
+- No standardized scale (e.g. monthly listeners vs. lifetime metrics)
+- Insight quality depends on the consistency and bias of source data
+
+### Potential improvements
+
+- Historical tracking and trend comparison over time
+- Artist-to-artist benchmarking to provide clearer performance context
+- Metric normalization to improve cross-genre comparison
+- Configurable insight depth depending on use case
+  configurable insight depth
+
+---
+
+### ⚠️ Cold Start Notice
+
+The first search after a period of inactivity may take longer than usual. This is due to the cold start behavior of the backend.
+
+Subsequent searches are faster, as the backend remains active for a short period after the first request.
 
 ---
 
 ## 📬 Contact
 
-**Lucrece Fodouop**  
+Feel free to reach out if you have questions, feedback, or want to discuss the project.
+
+**Lucrèce Fodouop**  
 📧 [lfodouop@gmail.com](mailto:lfodouop@gmail.com)
