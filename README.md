@@ -2,7 +2,7 @@
 
 **Artist Insight** is a frontend-focused mini-app that demonstrates how **LLM-driven analysis** can be combined with a clean, responsive interface to transform raw artist metrics into **clear, interpretable insights**.
 
-The core of the project is not the metrics themselves, but the **LLM-powered interpretation layer** that turns imperfect, fragmented data into meaningful signals for decision-making.
+The core of the project is not the metrics themselves, but the **LLM-powered interpretation layer** that turns raw data into meaningful signals for decision-making.
 
 <img width="944" height="431" alt="artist-preview" src="https://github.com/user-attachments/assets/d3289d6a-89a5-409b-86fa-9c8859284e38" />
 
@@ -12,7 +12,7 @@ The core of the project is not the metrics themselves, but the **LLM-powered int
 
 ## 📱 Responsive Preview
 
-The application is primarily designed for desktop usage (B2B context) but includes a fully responsive layout to ensure usability on smaller screens.
+While designed for desktop usage (B2B context), the interface is fully responsive. The layout automatically adapts to tablets and mobile browsers to ensure data readability across all devices.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/ca26df24-c630-4583-b616-695c11c9c6a5" alt="Mobile Preview" width=300  />
@@ -24,7 +24,7 @@ The application is primarily designed for desktop usage (B2B context) but includ
 
 Artist Insight explores a simple question:
 
-> _How can we make artist performance metrics immediately understandable, without relying on heavy dashboards or manual analysis?_
+> How can we make artist performance metrics immediately understandable, without relying on heavy dashboards or manual analysis?
 
 Rather than exposing dozens of raw numbers, the app combines:
 
@@ -38,6 +38,7 @@ This project was built as a **personal learning project** with a strong focus on
 
 > This project is not intended for artist discovery.
 > It assumes prior familiarity with the artist and focuses on performance interpretation rather than recommendation.
+
 
 ---
 
@@ -95,6 +96,24 @@ The goal is not exhaustive analytics, but **fast signal detection**.
 
 ---
 
+## Data Flow Overview
+
+```mermaid
+graph LR
+
+  LF[Last.fm API] --> BE[Backend API<br/>Node.js + Express]
+  DZ[Deezer API] --> BE
+  LLM[Google AI Studio] --> BE
+
+  BE --> FE[Frontend<br/>Data Orchestration]
+
+  FE --> UI[User Interface<br/>Insights & Metrics]
+
+```
+> All external data sources are accessed through a single backend API (exposing three routes), then consumed and projected by the frontend UI.
+
+
+
 ## 🛠️ Tech Stack
 
 - **Frontend:** React, TypeScript, Vite
@@ -102,7 +121,7 @@ The goal is not exhaustive analytics, but **fast signal detection**.
 - **APIs:**
   - Last.fm API for artist metrics and top tracks
   - Deezer API as a fallback source for artist images
-- **LLM:** Google Gemini 2.5 Flash
+- **LLM:** Gemini 2.5 Flash (Google AI Studio)
 - **Backend:** Node.js, Express
 - **Deployment:** Vercel (frontend), Render (backend)
 
@@ -161,7 +180,7 @@ The goal is not exhaustive analytics, but **fast signal detection**.
 
 ---
 
-### ⚠️ Cold Start Notice
+### ⚠️ Performance Note
 
 The first search after a period of inactivity may take longer than usual. This is due to the cold start behavior of the backend.
 
