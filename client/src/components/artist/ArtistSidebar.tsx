@@ -61,7 +61,16 @@ const ArtistSidebar = ({
         );
 
       case 'loading':
-        return <EmptyState message="Loading ..." />;
+        return (
+          <div className="flex justify-center items-center py-10">
+            <div
+              className="animate-spin 
+              rounded-full 
+              border-2 border-t-white border-gray-700
+              w-8 h-8"
+            ></div>
+          </div>
+        );
 
       case 'ready': {
         const sortedTracks = [...topTracks].sort(
